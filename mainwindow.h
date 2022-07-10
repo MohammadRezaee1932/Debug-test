@@ -2,7 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+struct can_frame {
+    int    can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
+    int    can_dlc; /* frame payload length in byte (0 .. CAN_MAX_DLEN) */
+    int    data[8];
+};
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -24,6 +28,17 @@ private slots:
 
 
        void on_Hide_Button_toggled(bool checked);
+
+     //  void on_User_setting1_sliderMoved(int position);
+
+
+
+       void on_User_setting1_valueChanged(int value);
+
+       void on_pushButton_2_clicked();
+
+signals:
+       void can_sent(int);
 
 private:
     Ui::MainWindow *ui;
