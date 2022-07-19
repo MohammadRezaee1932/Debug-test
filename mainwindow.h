@@ -23,22 +23,22 @@ private slots:
 
        void on_pushButton_clicked(bool checked);
 
-
-
-
-
        void on_Hide_Button_toggled(bool checked);
 
      //  void on_User_setting1_sliderMoved(int position);
-
-
 
        void on_User_setting1_valueChanged(int value);
 
        void on_pushButton_2_clicked();
 
+       void show_data_status(can_frame);
+
+
+
+       void on_data_clicked();
+
 signals:
-       void can_sent(int);
+       void can_sent(can_frame);
 
 private:
     Ui::MainWindow *ui;
