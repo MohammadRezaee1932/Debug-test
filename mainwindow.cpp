@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
    file.open(QIODevice::ReadOnly);
    qDebug()<<textStream.readLine();
 
-   ui->LOG_1->setText(textStream.readLine());
+   ui->LOG_1->setText(textStream.readLine());// read first line
 
 
 
