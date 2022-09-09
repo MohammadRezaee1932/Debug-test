@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QFile>
 #include <QDebug>
+#include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,6 +16,21 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this,SIGNAL(can_sent(can_frame)),this,SLOT(show_data_status(can_frame)));
    ui->pushButton->setCheckable(true);
    ui->Hide_Button->setCheckable(true);
+   countDown.start(1000); // every 1000 give me a tick
+
+   SecValue=20;
+   MinValue=20;
+   connect(&countDown,SIGNAL(timeout()),this,SLOT(CountDown_Slot()));
+   connect(this,SIGNAL(stop_car()),this,SLOT(Alarm()));
+
+   QFile file(":/csv/CSV/DTC-List.csv");
+   QTextStream textStream(&file);
+   file.open(QIODevice::ReadOnly);
+   qDebug()<<textStream.readLine();
+
+   ui->LOG_1->setText(textStream.readLine());
+
+
 
 }
 
@@ -25,6 +41,8 @@ int h=0;
 MainWindow::~MainWindow()
 {
     delete ui;
+    SecValue=0;
+    MinValue=0;
     //connect(ui->User_setting1,SIGNAL(valueChanged(int)),this,SLOT((int)));
 }
 
@@ -125,7 +143,7 @@ void MainWindow::show_data_status(can_frame A)
     id.setNum(A.can_id,16);
 
     ui->data_1->setText(data_1);
-    ui->data_2->setText(data_2);
+    //ui->data_2->setText(data_2);
     ui->data_3->setText(data_3);
     ui->data_4->setText(data_4);
     ui->msg_Id->setText(id);
@@ -136,12 +154,40 @@ void MainWindow::show_data_status(can_frame A)
     }
 
     //ui->data_1->setNum(A.data[0]);
- }
+}
 
-//uint status_initializing = (msg.data[0] & 0xF);
-//uint iHSA_status = ((msg.data[0] >> 4) & 0xF);
-
-void MainWindow::on_data_clicked()
+void MainWindow::CountDown_Slot()
 {
 
+  if (SecValue==0&&MinValue!=0)
+  {
+      MinValue--;
+      SecValue=59;
+   }
+  else if(SecValue!=0&&MinValue!=0)
+ {
+      SecValue--;
+ }
+  else if(SecValue==0&&MinValue==0){
+      MinValue=0;
+      SecValue=0;
+      emit stop_car();
+  }
+ // qDebug()<<MinValue<<SecValue;
+  ui->Min->setNum(MinValue);
+  ui->Sec->setNum(SecValue);
+
+
+
 }
+
+void MainWindow::Alarm()
+{
+    qDebug()<<"stop";
+  //  MinValue=0;
+    //SecValue=0;
+
+}
+
+
+

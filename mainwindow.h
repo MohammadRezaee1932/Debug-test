@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
 struct can_frame {
     int    can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
     int    can_dlc; /* frame payload length in byte (0 .. CAN_MAX_DLEN) */
@@ -33,14 +34,21 @@ private slots:
 
        void show_data_status(can_frame);
 
+       void CountDown_Slot();
 
+       void Alarm();
 
-       void on_data_clicked();
 
 signals:
        void can_sent(can_frame);
+       void stop_car();
 
 private:
     Ui::MainWindow *ui;
+
+    QTimer countDown;
+    int SecValue;
+    int MinValue;
+
 };
 #endif // MAINWINDOW_H
