@@ -39,6 +39,14 @@ private slots:
        void Alarm();
 
 
+       void on_pushButton_3_clicked();
+
+       void on_pushButton_4_clicked();
+
+       void devision(qint8 A);
+
+       void on_data_clicked();
+
 signals:
        void can_sent(can_frame);
        void stop_car();

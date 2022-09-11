@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
+#include <QString>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -28,8 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
    file.open(QIODevice::ReadOnly);
    qDebug()<<textStream.readLine();
 
-   ui->LOG_1->setText(textStream.readLine());// read first line
-
+   ui->LOG_1->setText(textStream.readLine());// read first line//
 
 
 }
@@ -126,7 +126,7 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::show_data_status(can_frame A)
 {
     // deviding the message area :
-    static int A0_0=A.data[0] & 0xF; // 1
+    static int A0_0=A.data[0] & 0xF; // 1 -> 0b00001111 means just to take first lsb bits
     static int A0_1=(A.data[0] >> 4) & 0xF; //2
     static int A1_0=A.data[1] & 0xF; //3
     static int A1_1=(A.data[1] >> 4) & 0xF; //4
@@ -190,4 +190,41 @@ void MainWindow::Alarm()
 }
 
 
+static int O=0;
 
+    void MainWindow::on_pushButton_3_clicked()
+{
+   if (O < 10)
+   { ++O;}
+    ui->usersetting->setNum(O);
+}
+
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    if (-10< O)
+    {--O;}
+    ui->usersetting->setNum(O);
+}
+
+void MainWindow::devision(qint8 A)
+{   //char data_1;
+    //char data_2;
+
+    // deviding the message area :
+   int A0_0=A & 0xF; // 1 -> 0b00001111 means just to take first lsb bits
+   int A0_1=(A >> 6) & 0b01; //2
+
+   // data_1.setNum(A0_0,16);
+    //data_1.setNum(A0_1,16);
+
+  qDebug()<<"A0_0 is :"<<A0_0;
+  qDebug()<<"A0_1 is :"<<A0_1;
+
+}
+void MainWindow::on_data_clicked()
+{
+    qint8 B = 0x45;//2
+
+    devision(B);
+}
